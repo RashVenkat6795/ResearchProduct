@@ -111,10 +111,10 @@ ResearchProduct/
 5. **Alternative: Start servers separately**
    ```bash
    # Terminal 1 - Start backend server
-   npm run server
+   npm run dev
    
    # Terminal 2 - Start frontend
-   npm run dev
+   npm run dev:full
    ```
 
 6. **Open your browser**

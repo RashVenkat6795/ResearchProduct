@@ -8,11 +8,16 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "cd amazon-scraper-backend && npm start",
+    "server": "cd amazon-scraper-v2 && npm run pm2:start",
+    "server:stop": "cd amazon-scraper-v2 && npm run pm2:stop",
+    "server:logs": "cd amazon-scraper-v2 && npm run pm2:logs",
+    "server:status": "cd amazon-scraper-v2 && npm run pm2:status",
     "dev:full": "concurrently \"npm run server\" \"npm run dev\"",
-    "start": "npm run server"
+    "start": "npm run server",
+    "backend:start": "./start-backend.sh"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.21",
     "axios": "^1.12.1",
