@@ -79,10 +79,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b px-4 py-8">
+      <div className="bg-white border-b px-4 py-20">
         <div className="flex items-center justify-center gap-3">
-          <ShoppingCart className="w-8 h-8 text-primary" />
-          <h1 className="text-2xl font-semibold">Amazon Best Seller Product Research</h1>
+          <ShoppingCart className="w-10 h-10 text-primary" />
+          <h1 className="text-3xl font-semibold">Amazon Best Seller Product Research</h1>
         </div>
       </div>
 
