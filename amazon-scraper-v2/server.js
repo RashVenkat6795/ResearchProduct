@@ -101,15 +101,39 @@ const isGrocery = (category) => {
 
 // Helper function to determine if product has confusing sizes
 const hasConfusingSizes = (title) => {
-  const sizeTerms = ['size', 'small', 'medium', 'large', 'xl', 'xxl', 'inch', 'cm'];
+  const sizeTerms = [
+    'size', 'small', 'medium', 'large', 'xl', 'xxl', 'xxxl', 'inch', 'cm',
+    'cargo', 'polo', 't-shirt', 'shirt', 'pants', 'shorts', 'jeans',
+    'available in', 'combo', 'pack', 'variations', 'sizes', 'fit',
+    'regular fit', 'slim fit', 'loose fit', 'tight fit'
+  ];
   const lowerTitle = title.toLowerCase();
   
   return sizeTerms.some(term => lowerTitle.includes(term));
 };
 
+// Helper function to check if product is valid (not a service or invalid item)
+const isValidProduct = (title) => {
+  const invalidTerms = [
+    'credit card', 'bill', 'payment', 'service', 'subscription', 'gift card',
+    'voucher', 'coupon', 'offer', 'deal', 'promotion', 'advertisement',
+    'sponsored', 'ad', 'banner', 'link', 'click here', 'learn more'
+  ];
+  const lowerTitle = title.toLowerCase();
+  
+  return !invalidTerms.some(term => lowerTitle.includes(term));
+};
+
 // Helper function to determine if product is electronics
 const isElectronics = (title, category) => {
-  const electronicsTerms = ['phone', 'mobile', 'laptop', 'computer', 'tablet', 'headphone', 'speaker', 'camera', 'tv', 'monitor', 'keyboard', 'mouse', 'charger', 'cable', 'usb', 'bluetooth', 'wifi', 'led', 'battery', 'power bank'];
+  const electronicsTerms = [
+    'phone', 'mobile', 'laptop', 'computer', 'tablet', 'headphone', 'speaker', 
+    'camera', 'tv', 'monitor', 'keyboard', 'mouse', 'charger', 'cable', 'usb', 
+    'bluetooth', 'wifi', 'led', 'battery', 'power bank', 'extension board', 
+    'multi plug', 'adapter', 'juicer', 'mixer', 'grinder', 'blender', 'appliance',
+    'electronic', 'digital', 'smart', 'wireless', 'electric', 'power', 'volt',
+    'amp', 'watt', 'socket', 'plug', 'cord', 'cable'
+  ];
   const lowerTitle = title.toLowerCase();
   const lowerCategory = category.toLowerCase();
   
@@ -181,7 +205,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
                      $el.find('span').first().text().trim() ||
                      $el.text().trim();
         
-        if (!title || title.length < 10 || title.includes('See More') || title.includes('Page')) return;
+        if (!title || title.length < 10 || title.includes('See More') || title.includes('Page') || !isValidProduct(title)) return;
 
         // Extract price with improved selectors
         const priceText = $el.find('.a-price-whole').text() ||
@@ -260,7 +284,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
                        $el.find('span').first().text().trim() ||
                        $el.text().trim();
           
-          if (!title || title.length < 10 || title.includes('See More') || title.includes('Page')) return;
+          if (!title || title.length < 10 || title.includes('See More') || title.includes('Page') || !isValidProduct(title)) return;
 
           // Extract price with improved selectors
           const priceText = $el.find('.a-price-whole').text() ||
@@ -612,11 +636,14 @@ const getBrandingPotential = (product) => {
 
 // Helper function to generate product URL
 const generateProductUrl = (product) => {
-  const slug = product.name.toLowerCase()
-    .replace(/[^a-z0-9\s]/g, '')
-    .replace(/\s+/g, '-')
-    .substring(0, 50);
-  return `https://amazon.in/dp/${product.id}`;
+  // If we have a real Amazon URL, use it
+  if (product.url && product.url.includes('amazon.in')) {
+    return product.url;
+  }
+  
+  // Otherwise, create a search URL for the product
+  const searchQuery = encodeURIComponent(product.name);
+  return `https://www.amazon.in/s?k=${searchQuery}`;
 };
 
 // Helper function to transform backend product to frontend format
