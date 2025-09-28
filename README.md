@@ -63,8 +63,7 @@ Wait for this installation to complete as well.
 #### Step 1: Start the Backend Server
 In your first terminal window (the one where you installed backend dependencies):
 ```bash
-cd amazon-scraper-v2
-npm start
+cd amazon-scraper-v2 && npm start
 ```
 
 You should see a message like:
@@ -77,8 +76,7 @@ You should see a message like:
 #### Step 2: Start the Frontend Application
 In your second terminal window (the one where you installed frontend dependencies):
 ```bash
-cd front-end-ui
-npm run dev
+cd front-end-ui && npm run dev
 ```
 
 You should see a message like:

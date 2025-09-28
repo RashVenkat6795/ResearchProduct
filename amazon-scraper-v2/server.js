@@ -306,8 +306,8 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
                          $el.text().match(/#(\d+)/)?.[1];
           const bsr = parseInt(bsrText?.replace(/[#]/g, '')) || Math.floor(Math.random() * 5000) + 100;
 
-          // Extract category from URL or page context
-          const categoryText = 'General';
+          // Extract category based on product title and content
+          const categoryText = determineCategoryFromTitle(title);
 
           // Generate weight (random for now as it's not available in bestseller list)
           const weight = Math.round((Math.random() * 0.8 + 0.1) * 100) / 100; // 0.1 to 0.9 kg
