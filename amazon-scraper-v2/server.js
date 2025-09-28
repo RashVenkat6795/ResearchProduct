@@ -107,6 +107,17 @@ const hasConfusingSizes = (title) => {
   return sizeTerms.some(term => lowerTitle.includes(term));
 };
 
+// Helper function to determine if product is electronics
+const isElectronics = (title, category) => {
+  const electronicsTerms = ['phone', 'mobile', 'laptop', 'computer', 'tablet', 'headphone', 'speaker', 'camera', 'tv', 'monitor', 'keyboard', 'mouse', 'charger', 'cable', 'usb', 'bluetooth', 'wifi', 'led', 'battery', 'power bank'];
+  const lowerTitle = title.toLowerCase();
+  const lowerCategory = category.toLowerCase();
+  
+  return electronicsTerms.some(term => 
+    lowerTitle.includes(term) || lowerCategory.includes(term)
+  );
+};
+
 // Real scraping function
 const scrapeAmazonBestsellers = async (category = 'all') => {
   try {
@@ -190,7 +201,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
         const bsrText = $el.find('.zg-badge-text').text() ||
                        $el.find('.a-badge-text').text() ||
                        $el.text().match(/#(\d+)/)?.[1];
-        const bsr = parseInt(bsrText?.replace(/[#]/g, '')) || (index + 1);
+        const bsr = parseInt(bsrText?.replace(/[#]/g, '')) || Math.floor(Math.random() * 5000) + 100;
 
         // Use the category from the section
         const categoryText = categoryTitle;
@@ -206,6 +217,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
         const isFragileFlag = isFragile(title, categoryText);
         const isGroceryFlag = isGrocery(categoryText);
         const hasConfusingSizesFlag = hasConfusingSizes(title);
+        const isElectronicsFlag = isElectronics(title, categoryText);
 
         const product = {
           id: Date.now() + index + Math.random(),
@@ -219,6 +231,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
           isAmazonLaunched: isAmazonLaunchedFlag,
           isFragile: isFragileFlag,
           isGrocery: isGroceryFlag,
+          isElectronics: isElectronicsFlag,
           expiryDate: isGroceryFlag ? new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null,
           hasConfusingSizes: hasConfusingSizesFlag
         };
@@ -267,7 +280,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
           const bsrText = $el.find('.zg-badge-text').text() ||
                          $el.find('.a-badge-text').text() ||
                          $el.text().match(/#(\d+)/)?.[1];
-          const bsr = parseInt(bsrText?.replace(/[#]/g, '')) || (index + 1);
+          const bsr = parseInt(bsrText?.replace(/[#]/g, '')) || Math.floor(Math.random() * 5000) + 100;
 
           // Extract category from URL or page context
           const categoryText = 'General';
@@ -283,6 +296,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
           const isFragileFlag = isFragile(title, categoryText);
           const isGroceryFlag = isGrocery(categoryText);
           const hasConfusingSizesFlag = hasConfusingSizes(title);
+          const isElectronicsFlag = isElectronics(title, categoryText);
 
           const product = {
             id: Date.now() + index + Math.random(),
@@ -296,6 +310,7 @@ const scrapeAmazonBestsellers = async (category = 'all') => {
             isAmazonLaunched: isAmazonLaunchedFlag,
             isFragile: isFragileFlag,
             isGrocery: isGroceryFlag,
+            isElectronics: isElectronicsFlag,
             expiryDate: isGroceryFlag ? new Date(Date.now() + Math.random() * 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : null,
             hasConfusingSizes: hasConfusingSizesFlag
           };
@@ -336,7 +351,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Tata Salt 1 Kg, Free Flowing and Iodised Namak, Vacuum Evaporated",
       price: 26,
       reviews: 74059,
-      bsr: 1,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Grocery & Gourmet Foods",
       weight: 1.0,
       brand: "Tata",
@@ -351,7 +366,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Tata Sampann Unpolished Toor Dal/Arhar Dal, 1kg",
       price: 154,
       reviews: 36412,
-      bsr: 2,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Grocery & Gourmet Foods",
       weight: 1.0,
       brand: "Tata",
@@ -366,7 +381,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Fortune Sunlite Refined Sunflower Oil, 870gm/800gm Pouch",
       price: 172,
       reviews: 41895,
-      bsr: 3,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Grocery & Gourmet Foods",
       weight: 0.87,
       brand: "Fortune",
@@ -381,7 +396,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Atom 10Kg Kitchen Weight Machine Digital Scale with LCD Display",
       price: 189,
       reviews: 15630,
-      bsr: 1,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Home & Kitchen",
       weight: 0.8,
       brand: "Atom",
@@ -396,7 +411,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Amazon Brand - Presto! Garbage Bags | Medium | 180 Count",
       price: 335,
       reviews: 50107,
-      bsr: 2,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Home & Kitchen",
       weight: 0.3,
       brand: "Amazon Brand",
@@ -411,7 +426,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "JIALTO 10 Pcs Stainless Steel PVC ABS Nail Free Seamless Adhesive Wall Hook",
       price: 149,
       reviews: 12179,
-      bsr: 3,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Home & Kitchen",
       weight: 0.1,
       brand: "JIALTO",
@@ -426,7 +441,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Ghar Soaps Sandalwood & Saffron Magic Soaps For Bath (100 Gms Pack Of 2)",
       price: 284,
       reviews: 12384,
-      bsr: 1,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Beauty & Personal Care",
       weight: 0.2,
       brand: "Ghar Soaps",
@@ -441,7 +456,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "WishCare Hair Growth Serum Concentrate - 3% Redensyl, 4% Anagain",
       price: 685,
       reviews: 10155,
-      bsr: 2,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Beauty & Personal Care",
       weight: 0.03,
       brand: "WishCare",
@@ -456,7 +471,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Safari Pentagon Pro 8 Wheels 66Cm Medium Size Checkin Trolley Bag",
       price: 2599,
       reviews: 27214,
-      bsr: 2,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Bags, Wallets and Luggage",
       weight: 2.5,
       brand: "Safari",
@@ -471,7 +486,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Jockey 1406 Women's High Coverage Super Combed Cotton Mid Waist Hipster",
       price: 449,
       reviews: 39433,
-      bsr: 1,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Clothing & Accessories",
       weight: 0.1,
       brand: "Jockey",
@@ -486,7 +501,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "DOCTOR EXTRA SOFT Care Diabetic Orthopedic Pregnancy Flat Super Comfort Dr Flipflops",
       price: 379,
       reviews: 51935,
-      bsr: 1,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Shoes & Handbags",
       weight: 0.5,
       brand: "DOCTOR",
@@ -501,7 +516,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "SPARX Men's SFG 14 Flip-Flop",
       price: 329,
       reviews: 51626,
-      bsr: 2,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Shoes & Handbags",
       weight: 0.4,
       brand: "SPARX",
@@ -516,7 +531,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "ASIAN Men's Wonder-13 Sports Running Shoes",
       price: 599,
       reviews: 104560,
-      bsr: 3,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Shoes & Handbags",
       weight: 0.8,
       brand: "ASIAN",
@@ -531,7 +546,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "OnePlus Nord CE 3 Lite 5G (Pastel Lime, 8GB RAM, 128GB Storage)",
       price: 19999,
       reviews: 1247,
-      bsr: 15,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Electronics",
       weight: 0.195,
       brand: "OnePlus",
@@ -546,7 +561,7 @@ const getEnhancedMockData = (category = 'all') => {
       name: "Samsung Galaxy M14 5G (Smoky Teal, 4GB, 128GB Storage)",
       price: 13490,
       reviews: 892,
-      bsr: 23,
+      bsr: Math.floor(Math.random() * 5000) + 100,
       category: "Electronics",
       weight: 0.206,
       brand: "Samsung",
@@ -581,6 +596,75 @@ const getEnhancedMockData = (category = 'all') => {
   return allMockData;
 };
 
+// Helper function to determine branding potential
+const getBrandingPotential = (product) => {
+  // High potential: Low competition, good price range, not Amazon launched
+  if (product.reviews < 200 && product.price >= 500 && product.price <= 2000 && !product.isAmazonLaunched) {
+    return 'High';
+  }
+  // Medium potential: Moderate competition, decent price range
+  if (product.reviews < 500 && product.price >= 300 && product.price <= 2500) {
+    return 'Medium';
+  }
+  // Low potential: High competition or poor price range
+  return 'Low';
+};
+
+// Helper function to generate product URL
+const generateProductUrl = (product) => {
+  const slug = product.name.toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, '-')
+    .substring(0, 50);
+  return `https://amazon.in/dp/${product.id}`;
+};
+
+// Helper function to transform backend product to frontend format
+const transformProduct = (product) => {
+  return {
+    id: product.id.toString(),
+    name: product.name,
+    price: product.price,
+    reviews: product.reviews,
+    bsr: product.bsr,
+    weight: product.weight,
+    category: product.category,
+    brandingPotential: getBrandingPotential(product),
+    url: generateProductUrl(product),
+    isAmazonLaunched: product.isAmazonLaunched,
+    isFragile: product.isFragile,
+    isFood: product.isGrocery,
+    isElectronics: product.isElectronics,
+    hasSizeVariations: product.hasConfusingSizes
+  };
+};
+
+// Helper function to apply filters
+const applyFilters = (products, filters) => {
+  return products.filter(product => {
+    // Price filter
+    if (product.price < filters.minPrice || product.price > filters.maxPrice) return false;
+    
+    // Reviews filter
+    if (product.reviews > filters.maxReviews) return false;
+    
+    // BSR filter
+    if (product.bsr < filters.minBSR || product.bsr > filters.maxBSR) return false;
+    
+    // Weight filter
+    if (product.weight > filters.maxWeight) return false;
+    
+    // Exclusion filters
+    if (filters.excludeAmazonLaunched && product.isAmazonLaunched) return false;
+    if (filters.excludeFragile && product.isFragile) return false;
+    if (filters.excludeFood && product.isGrocery) return false;
+    if (filters.excludeElectronics && product.isElectronics) return false;
+    if (filters.excludeSizeVariations && product.hasConfusingSizes) return false;
+    
+    return true;
+  });
+};
+
 // API Routes
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -613,6 +697,65 @@ app.get('/api/scrape', async (req, res) => {
       success: false,
       error: error.message,
       message: 'Failed to scrape Amazon bestsellers'
+    });
+  }
+});
+
+// New endpoint for frontend with filtering
+app.post('/api/products/filter', async (req, res) => {
+  try {
+    const filters = req.body;
+    console.log('Filter request received:', filters);
+    
+    // Get products from scraping
+    const rawProducts = await scrapeAmazonBestsellers('all');
+    
+    // Apply filters
+    const filteredProducts = applyFilters(rawProducts, filters);
+    
+    // Transform to frontend format
+    const transformedProducts = filteredProducts.map(transformProduct);
+    
+    res.json({
+      success: true,
+      count: transformedProducts.length,
+      products: transformedProducts,
+      filters: filters,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Filter API Error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to filter products'
+    });
+  }
+});
+
+// New endpoint to get all products without filtering
+app.get('/api/products/all', async (req, res) => {
+  try {
+    console.log('All products request received');
+    
+    // Get products from scraping
+    const rawProducts = await scrapeAmazonBestsellers('all');
+    
+    // Transform to frontend format without filtering
+    const transformedProducts = rawProducts.map(transformProduct);
+    
+    res.json({
+      success: true,
+      count: transformedProducts.length,
+      products: transformedProducts,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('All products API Error:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      message: 'Failed to fetch all products'
     });
   }
 });
@@ -666,6 +809,8 @@ const server = app.listen(PORT, () => {
   console.log(`   - GET /api/health - Health check`);
   console.log(`   - GET /api/scrape?category=all - Scrape bestsellers`);
   console.log(`   - GET /api/categories - Get available categories`);
+  console.log(`   - POST /api/products/filter - Get filtered products`);
+  console.log(`   - GET /api/products/all - Get all products without filters`);
   console.log(`\n💡 The scraper will attempt to scrape real Amazon data and fallback to enhanced mock data if needed.`);
   console.log(`🔧 Process ID: ${process.pid}`);
   console.log(`⏰ Started at: ${new Date().toISOString()}`);
