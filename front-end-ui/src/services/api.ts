@@ -75,6 +75,13 @@ class ApiService {
     return this.request('/products/all');
   }
 
+  async getComprehensiveProducts(filters: Filters): Promise<ApiResponse<Product>> {
+    return this.request('/products/comprehensive', {
+      method: 'POST',
+      body: JSON.stringify(filters),
+    });
+  }
+
   async getCategories(): Promise<{ success: boolean; categories: string[] }> {
     return this.request('/categories');
   }
