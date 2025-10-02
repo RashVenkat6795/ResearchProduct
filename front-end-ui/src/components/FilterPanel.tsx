@@ -18,6 +18,7 @@ interface FilterPanelProps {
     excludeFood: boolean;
     excludeElectronics: boolean;
     excludeSizeVariations: boolean;
+    excludeConsumptionLiving: boolean;
   };
   onFilterChange: (filters: any) => void;
   onScrape: () => void;
@@ -162,6 +163,14 @@ export function FilterPanel({ filters, onFilterChange, onScrape, onScrapeAll, on
                 onCheckedChange={(checked) => handleInputChange('excludeSizeVariations', checked)}
               />
               <Label htmlFor="size-variations" className="text-sm">Size variations</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="consumption-living"
+                checked={filters.excludeConsumptionLiving}
+                onCheckedChange={(checked) => handleInputChange('excludeConsumptionLiving', checked)}
+              />
+              <Label htmlFor="consumption-living" className="text-sm">Consumption/Living objects</Label>
             </div>
           </div>
         </div>

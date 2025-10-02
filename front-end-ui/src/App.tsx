@@ -20,6 +20,7 @@ export default function App() {
     excludeFood: true,
     excludeElectronics: true,
     excludeSizeVariations: true,
+    excludeConsumptionLiving: true,
   });
 
   const [products, setProducts] = useState([]);

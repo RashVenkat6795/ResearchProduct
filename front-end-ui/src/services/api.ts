@@ -12,6 +12,7 @@ export interface Filters {
   excludeFood: boolean;
   excludeElectronics: boolean;
   excludeSizeVariations: boolean;
+  excludeConsumptionLiving: boolean;
 }
 
 export interface Product {
@@ -29,6 +30,13 @@ export interface Product {
   isFood: boolean;
   isElectronics: boolean;
   hasSizeVariations: boolean;
+  isConsumptionLiving: boolean;
+  sizeInfo?: Array<{
+    value: number;
+    unit: string;
+    fullMatch: string;
+  }>;
+  primaryBSR?: number;
 }
 
 export interface ApiResponse<T> {

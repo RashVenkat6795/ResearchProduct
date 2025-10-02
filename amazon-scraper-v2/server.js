@@ -124,6 +124,125 @@ const isValidProduct = (title) => {
   return !invalidTerms.some(term => lowerTitle.includes(term));
 };
 
+// Helper function to check if product is consumption/living object
+const isConsumptionLivingObject = (title, description = '') => {
+  const consumptionTerms = [
+    'food', 'beverage', 'drink', 'snack', 'eat', 'consumable', 'edible',
+    'medicine', 'drug', 'pill', 'tablet', 'capsule', 'syrup', 'injection',
+    'vaccine', 'supplement', 'vitamin', 'protein powder', 'nutrition',
+    'pet food', 'dog food', 'cat food', 'animal feed', 'livestock',
+    'plant', 'seed', 'fertilizer', 'pesticide', 'herbicide', 'garden',
+    'flower', 'tree', 'vegetable', 'fruit', 'organic', 'natural',
+    'cooking oil', 'ghee', 'butter', 'milk', 'cheese', 'yogurt',
+    'honey', 'jam', 'pickle', 'sauce', 'spice', 'masala', 'tea',
+    'coffee', 'juice', 'soda', 'energy drink', 'alcohol', 'wine',
+    'beer', 'liquor', 'cigarette', 'tobacco', 'cigar', 'hookah',
+    'perfume', 'deodorant', 'shampoo', 'soap', 'cream', 'lotion',
+    'cosmetic', 'makeup', 'lipstick', 'nail polish', 'hair color',
+    'face wash', 'body wash', 'toothpaste', 'mouthwash', 'floss',
+    'diaper', 'sanitary', 'tissue', 'paper', 'napkin', 'towel',
+    'cleaning', 'detergent', 'soap', 'disinfectant', 'sanitizer'
+  ];
+  
+  const combinedText = (title + ' ' + description).toLowerCase();
+  
+  return consumptionTerms.some(term => combinedText.includes(term));
+};
+
+// Helper function to extract size information from product description
+const extractSizeInfo = (title, description = '') => {
+  const combinedText = (title + ' ' + description).toLowerCase();
+  
+  // Common size patterns
+  const sizePatterns = [
+    /\b(\d+)\s*(?:ml|milliliter|millilitre)\b/i,
+    /\b(\d+)\s*(?:l|liter|litre)\b/i,
+    /\b(\d+)\s*(?:g|gram|gm)\b/i,
+    /\b(\d+)\s*(?:kg|kilogram)\b/i,
+    /\b(\d+)\s*(?:inch|inches|in)\b/i,
+    /\b(\d+)\s*(?:cm|centimeter|centimetre)\b/i,
+    /\b(\d+)\s*(?:mm|millimeter|millimetre)\b/i,
+    /\b(\d+)\s*(?:ft|feet|foot)\b/i,
+    /\b(\d+)\s*(?:m|meter|metre)\b/i,
+    /\b(\d+)\s*(?:piece|pieces|pcs|pcs\.|count|pack|packs)\b/i,
+    /\b(\d+)\s*(?:sheet|sheets)\b/i,
+    /\b(\d+)\s*(?:roll|rolls)\b/i,
+    /\b(\d+)\s*(?:bottle|bottles)\b/i,
+    /\b(\d+)\s*(?:box|boxes)\b/i,
+    /\b(\d+)\s*(?:bag|bags)\b/i,
+    /\b(\d+)\s*(?:packet|packets)\b/i,
+    /\b(\d+)\s*(?:sachet|sachets)\b/i,
+    /\b(\d+)\s*(?:tablet|tablets)\b/i,
+    /\b(\d+)\s*(?:capsule|capsules)\b/i,
+    /\b(\d+)\s*(?:strip|strips)\b/i,
+    /\b(\d+)\s*(?:tube|tubes)\b/i,
+    /\b(\d+)\s*(?:stick|sticks)\b/i,
+    /\b(\d+)\s*(?:bar|bars)\b/i,
+    /\b(\d+)\s*(?:loaf|loaves)\b/i,
+    /\b(\d+)\s*(?:slice|slices)\b/i,
+    /\b(\d+)\s*(?:cup|cups)\b/i,
+    /\b(\d+)\s*(?:spoon|spoons)\b/i,
+    /\b(\d+)\s*(?:teaspoon|teaspoons)\b/i,
+    /\b(\d+)\s*(?:tablespoon|tablespoons)\b/i,
+    /\b(\d+)\s*(?:tbsp|tsp)\b/i,
+    /\b(\d+)\s*(?:oz|ounce|ounces)\b/i,
+    /\b(\d+)\s*(?:lb|lbs|pound|pounds)\b/i,
+    /\b(\d+)\s*(?:gallon|gallons)\b/i,
+    /\b(\d+)\s*(?:pint|pints)\b/i,
+    /\b(\d+)\s*(?:quart|quarts)\b/i,
+    /\b(\d+)\s*(?:fl\.?\s*oz|fluid\s*ounce|fluid\s*ounces)\b/i,
+    /\b(\d+)\s*(?:cc|cubic\s*centimeter)\b/i,
+    /\b(\d+)\s*(?:mcg|microgram|micrograms)\b/i,
+    /\b(\d+)\s*(?:mg|milligram|milligrams)\b/i,
+    /\b(\d+)\s*(?:iu|international\s*unit|international\s*units)\b/i,
+    /\b(\d+)\s*(?:mcg|microgram|micrograms)\b/i,
+    /\b(\d+)\s*(?:dose|doses)\b/i,
+    /\b(\d+)\s*(?:serving|servings)\b/i,
+    /\b(\d+)\s*(?:portion|portions)\b/i,
+    /\b(\d+)\s*(?:meal|meals)\b/i,
+    /\b(\d+)\s*(?:day|days)\b/i,
+    /\b(\d+)\s*(?:week|weeks)\b/i,
+    /\b(\d+)\s*(?:month|months)\b/i,
+    /\b(\d+)\s*(?:year|years)\b/i
+  ];
+  
+  const sizeInfo = [];
+  
+  for (const pattern of sizePatterns) {
+    const matches = combinedText.match(pattern);
+    if (matches) {
+      sizeInfo.push({
+        value: parseInt(matches[1]),
+        unit: matches[0].replace(/\d+\s*/, '').trim(),
+        fullMatch: matches[0]
+      });
+    }
+  }
+  
+  return sizeInfo;
+};
+
+// Helper function to check if product has confusing sizes based on size info
+const hasConfusingSizesFromDescription = (title, description = '') => {
+  const sizeInfo = extractSizeInfo(title, description);
+  const combinedText = (title + ' ' + description).toLowerCase();
+  
+  // Check for clothing/fashion size indicators
+  const clothingSizeTerms = [
+    'size', 'small', 'medium', 'large', 'xl', 'xxl', 'xxxl', 'xs', 'xxs',
+    'inch', 'cm', 'cargo', 'polo', 't-shirt', 'shirt', 'pants', 'shorts',
+    'jeans', 'available in', 'combo', 'pack', 'variations', 'sizes', 'fit',
+    'regular fit', 'slim fit', 'loose fit', 'tight fit', 'sleeve',
+    'waist', 'chest', 'length', 'width', 'height', 'diameter'
+  ];
+  
+  const hasClothingSizes = clothingSizeTerms.some(term => combinedText.includes(term));
+  const hasMultipleSizes = sizeInfo.length > 1;
+  const hasClothingSizeNumbers = /\b(\d{2,3})\b/.test(combinedText); // 2-3 digit numbers often indicate clothing sizes
+  
+  return hasClothingSizes || hasMultipleSizes || hasClothingSizeNumbers;
+};
+
 // Helper function to determine if product is electronics
 const isElectronics = (title, category) => {
   const electronicsTerms = [
@@ -1398,6 +1517,10 @@ const transformProduct = (product) => {
   const listingScore = getListingOptimizationScore(product);
   const priceHistory = generatePriceHistory(product);
   
+  // Enhanced size detection from description
+  const enhancedSizeVariations = product.hasConfusingSizes || 
+    hasConfusingSizesFromDescription(product.name, product.description || '');
+  
   return {
     id: product.id.toString(),
     name: product.name,
@@ -1412,7 +1535,10 @@ const transformProduct = (product) => {
     isFragile: product.isFragile,
     isFood: product.isGrocery,
     isElectronics: product.isElectronics,
-    hasSizeVariations: product.hasConfusingSizes,
+    hasSizeVariations: enhancedSizeVariations,
+    isConsumptionLiving: isConsumptionLivingObject(product.name, product.description || ''),
+    sizeInfo: extractSizeInfo(product.name, product.description || ''),
+    primaryBSR: product.primaryBSR || product.bsr, // Use primary BSR if available
     // Jungle Scout features
     opportunityScore: profitability.opportunityScore,
     monthlySales: sales.monthly,
@@ -1458,8 +1584,9 @@ const applyFilters = (products, filters) => {
     // Reviews filter
     if (product.reviews > filters.maxReviews) return false;
     
-    // BSR filter
-    if (product.bsr < filters.minBSR || product.bsr > filters.maxBSR) return false;
+    // BSR filter (use primary BSR if available)
+    const bsrToCheck = product.primaryBSR || product.bsr;
+    if (bsrToCheck < filters.minBSR || bsrToCheck > filters.maxBSR) return false;
     
     // Weight filter
     if (product.weight > filters.maxWeight) return false;
@@ -1470,6 +1597,7 @@ const applyFilters = (products, filters) => {
     if (filters.excludeFood && product.isGrocery) return false;
     if (filters.excludeElectronics && product.isElectronics) return false;
     if (filters.excludeSizeVariations && product.hasConfusingSizes) return false;
+    if (filters.excludeConsumptionLiving && product.isConsumptionLiving) return false;
     
     return true;
   });
