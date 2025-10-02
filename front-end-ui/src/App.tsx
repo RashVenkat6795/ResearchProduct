@@ -11,9 +11,9 @@ export default function App() {
   const [filters, setFilters] = useState({
     minPrice: 300,
     maxPrice: 2500,
-    maxReviews: 1000,
-    minBSR: 1,
-    maxBSR: 50,
+    maxReviews: 500,
+    minBSR: 200,
+    maxBSR: 2000,
     maxWeight: 2,
     excludeAmazonLaunched: true,
     excludeFragile: true,
@@ -67,6 +67,26 @@ export default function App() {
     }
   };
 
+  const handleComprehensiveScrape = async () => {
+    setIsLoading(true);
+    setHasSearched(true);
+    setError(null);
+    
+    try {
+      const response = await apiService.getComprehensiveProducts(filters);
+      if (response.success && response.products) {
+        setProducts(response.products);
+      } else {
+        setError(response.message || 'Failed to fetch comprehensive products');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred while fetching comprehensive products');
+      console.error('Error fetching comprehensive products:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleFilterChange = (newFilters: Filters) => {
     setFilters(newFilters);
     
@@ -107,14 +127,14 @@ export default function App() {
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span className="text-sm font-medium">Reviews</span>
                 </div>
-                <p className="text-xs text-muted-foreground">&lt;1000 (ideal: &lt;500)</p>
+                <p className="text-xs text-muted-foreground">&lt;500 (ideal: &lt;500)</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="w-4 h-4 text-green-600" />
                   <span className="text-sm font-medium">BSR</span>
                 </div>
-                <p className="text-xs text-muted-foreground">100-5000 (ideal: 200-2000)</p>
+                <p className="text-xs text-muted-foreground">200-2000 (ideal: 200-2000)</p>
               </div>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -138,6 +158,7 @@ export default function App() {
               onFilterChange={handleFilterChange}
               onScrape={handleScrape}
               onScrapeAll={handleScrapeAll}
+              onComprehensiveScrape={handleComprehensiveScrape}
               isLoading={isLoading}
             />
           </div>

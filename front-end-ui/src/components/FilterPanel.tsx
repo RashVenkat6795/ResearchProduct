@@ -3,7 +3,7 @@ import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
 import { Button } from "./ui/button";
-import { Search, Filter, Globe } from "lucide-react";
+import { Search, Filter, Globe, Zap } from "lucide-react";
 
 interface FilterPanelProps {
   filters: {
@@ -22,10 +22,11 @@ interface FilterPanelProps {
   onFilterChange: (filters: any) => void;
   onScrape: () => void;
   onScrapeAll: () => void;
+  onComprehensiveScrape: () => void;
   isLoading: boolean;
 }
 
-export function FilterPanel({ filters, onFilterChange, onScrape, onScrapeAll, isLoading }: FilterPanelProps) {
+export function FilterPanel({ filters, onFilterChange, onScrape, onScrapeAll, onComprehensiveScrape, isLoading }: FilterPanelProps) {
   const handleInputChange = (field: string, value: string | boolean) => {
     const numValue = typeof value === 'string' ? parseFloat(value) || 0 : value;
     onFilterChange({
@@ -176,14 +177,24 @@ export function FilterPanel({ filters, onFilterChange, onScrape, onScrapeAll, is
             {isLoading ? 'Scraping...' : 'Scrape Products'}
           </Button>
           
-          <Button 
-            onClick={onScrapeAll} 
+          <Button
+            onClick={onScrapeAll}
             className="w-full" 
             variant="outline"
             disabled={isLoading}
           >
             <Globe className="w-4 h-4 mr-2" />
             {isLoading ? 'Scraping...' : 'Scrape All Products'}
+          </Button>
+
+          <Button
+            onClick={onComprehensiveScrape}
+            className="w-full" 
+            variant="secondary"
+            disabled={isLoading}
+          >
+            <Zap className="w-4 h-4 mr-2" />
+            {isLoading ? 'Scraping...' : 'Comprehensive Scrape'}
           </Button>
         </div>
       </CardContent>
