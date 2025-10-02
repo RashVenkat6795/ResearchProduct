@@ -142,6 +142,476 @@ const isElectronics = (title, category) => {
   );
 };
 
+// Helper function to determine category from product title
+const determineCategoryFromTitle = (title) => {
+  const lowerTitle = title.toLowerCase();
+  
+  // Sports & Fitness (check first as it has many overlapping keywords)
+  if (lowerTitle.includes('gym') || lowerTitle.includes('fitness') ||
+      lowerTitle.includes('exercise') || lowerTitle.includes('workout') ||
+      lowerTitle.includes('dumbbell') || lowerTitle.includes('barbell') ||
+      lowerTitle.includes('yoga') || lowerTitle.includes('mat') ||
+      lowerTitle.includes('gripper') || lowerTitle.includes('training') ||
+      lowerTitle.includes('equipment') || lowerTitle.includes('strength') ||
+      lowerTitle.includes('weight') || lowerTitle.includes('resistance') ||
+      lowerTitle.includes('cardio') || lowerTitle.includes('aerobics') ||
+      lowerTitle.includes('pilates') || lowerTitle.includes('dance') ||
+      lowerTitle.includes('running') || lowerTitle.includes('walking') ||
+      lowerTitle.includes('cycling') || lowerTitle.includes('swimming') ||
+      lowerTitle.includes('sports') || lowerTitle.includes('athletic') ||
+      lowerTitle.includes('racket') || lowerTitle.includes('bat') ||
+      lowerTitle.includes('ball') || lowerTitle.includes('protective') ||
+      lowerTitle.includes('helmet') || lowerTitle.includes('gloves') ||
+      lowerTitle.includes('knee') || lowerTitle.includes('elbow') ||
+      lowerTitle.includes('support') || lowerTitle.includes('brace')) {
+    return 'Sports & Fitness';
+  }
+  
+  // Electronics & Gadgets (check second as it has many overlapping keywords)
+  if (lowerTitle.includes('phone') || lowerTitle.includes('mobile') || 
+      lowerTitle.includes('laptop') || lowerTitle.includes('tablet') ||
+      lowerTitle.includes('headphone') || lowerTitle.includes('speaker') ||
+      lowerTitle.includes('camera') || lowerTitle.includes('tv') ||
+      lowerTitle.includes('monitor') || lowerTitle.includes('keyboard') ||
+      lowerTitle.includes('mouse') || lowerTitle.includes('charger') ||
+      lowerTitle.includes('cable') || lowerTitle.includes('usb') ||
+      lowerTitle.includes('bluetooth') || lowerTitle.includes('wifi') ||
+      lowerTitle.includes('led') || lowerTitle.includes('battery') ||
+      lowerTitle.includes('power bank') || lowerTitle.includes('extension board') ||
+      lowerTitle.includes('multi plug') || lowerTitle.includes('adapter') ||
+      lowerTitle.includes('electronic') || lowerTitle.includes('digital') ||
+      lowerTitle.includes('smart') || lowerTitle.includes('wireless') ||
+      lowerTitle.includes('electric') || lowerTitle.includes('volt') ||
+      lowerTitle.includes('amp') || lowerTitle.includes('watt') ||
+      lowerTitle.includes('socket') || lowerTitle.includes('plug') ||
+      lowerTitle.includes('cord') || lowerTitle.includes('weighing scale') ||
+      lowerTitle.includes('weight machine') || lowerTitle.includes('juicer') ||
+      lowerTitle.includes('mixer') || lowerTitle.includes('grinder') ||
+      lowerTitle.includes('blender') || lowerTitle.includes('appliance')) {
+    return 'Electronics';
+  }
+  
+  // Home & Kitchen
+  if (lowerTitle.includes('kitchen') || lowerTitle.includes('cookware') ||
+      lowerTitle.includes('utensil') || lowerTitle.includes('plate') ||
+      lowerTitle.includes('bowl') || lowerTitle.includes('cup') ||
+      lowerTitle.includes('mug') || lowerTitle.includes('spoon') ||
+      lowerTitle.includes('fork') || lowerTitle.includes('knife') ||
+      lowerTitle.includes('cutting') || lowerTitle.includes('board') ||
+      lowerTitle.includes('container') || lowerTitle.includes('storage') ||
+      lowerTitle.includes('organizer') || lowerTitle.includes('hook') ||
+      lowerTitle.includes('hanger') || lowerTitle.includes('bag') ||
+      lowerTitle.includes('basket') || lowerTitle.includes('tray') ||
+      lowerTitle.includes('rack') || lowerTitle.includes('stand') ||
+      lowerTitle.includes('holder') || lowerTitle.includes('dispenser') ||
+      lowerTitle.includes('bottle') || lowerTitle.includes('jar') ||
+      lowerTitle.includes('box') || lowerTitle.includes('bins') ||
+      lowerTitle.includes('garbage') || lowerTitle.includes('trash') ||
+      lowerTitle.includes('cleaning') || lowerTitle.includes('mop') ||
+      lowerTitle.includes('broom') || lowerTitle.includes('vacuum') ||
+      lowerTitle.includes('duster') || lowerTitle.includes('spray') ||
+      lowerTitle.includes('detergent') || lowerTitle.includes('soap') ||
+      lowerTitle.includes('dish') || lowerTitle.includes('laundry') ||
+      lowerTitle.includes('bedsheet') || lowerTitle.includes('pillow') ||
+      lowerTitle.includes('mattress') || lowerTitle.includes('blanket') ||
+      lowerTitle.includes('curtain') || lowerTitle.includes('towel') ||
+      lowerTitle.includes('rug') || lowerTitle.includes('carpet') ||
+      lowerTitle.includes('decoration') || lowerTitle.includes('light') ||
+      lowerTitle.includes('lamp') || lowerTitle.includes('candle')) {
+    return 'Home & Kitchen';
+  }
+  
+  // Clothing & Accessories (be more specific to avoid false positives)
+  if ((lowerTitle.includes('shirt') || lowerTitle.includes('t-shirt') ||
+      lowerTitle.includes('polo') || lowerTitle.includes('top') ||
+      lowerTitle.includes('dress') || lowerTitle.includes('blouse') ||
+      lowerTitle.includes('pants') || lowerTitle.includes('trousers') ||
+      lowerTitle.includes('jeans') || lowerTitle.includes('shorts') ||
+      lowerTitle.includes('skirt') || lowerTitle.includes('leggings') ||
+      lowerTitle.includes('sweater') || lowerTitle.includes('hoodie') ||
+      lowerTitle.includes('jacket') || lowerTitle.includes('coat') ||
+      lowerTitle.includes('blazer') || lowerTitle.includes('suit') ||
+      lowerTitle.includes('underwear') || lowerTitle.includes('lingerie') ||
+      lowerTitle.includes('bra') || lowerTitle.includes('panties') ||
+      lowerTitle.includes('socks') || lowerTitle.includes('stockings') ||
+      lowerTitle.includes('belt') || lowerTitle.includes('watch') ||
+      lowerTitle.includes('jewelry') || lowerTitle.includes('necklace') ||
+      lowerTitle.includes('earrings') || lowerTitle.includes('bracelet') ||
+      lowerTitle.includes('ring') || lowerTitle.includes('cargo') ||
+      lowerTitle.includes('kurta') || lowerTitle.includes('dupatta') ||
+      lowerTitle.includes('saree') || lowerTitle.includes('salwar') ||
+      lowerTitle.includes('kameez')) && 
+      !lowerTitle.includes('bag') && !lowerTitle.includes('luggage') &&
+      !lowerTitle.includes('trolley') && !lowerTitle.includes('suitcase')) {
+    return 'Clothing & Accessories';
+  }
+  
+  // Beauty & Personal Care
+  if (lowerTitle.includes('face') || lowerTitle.includes('skin') ||
+      lowerTitle.includes('cream') || lowerTitle.includes('lotion') ||
+      lowerTitle.includes('serum') || lowerTitle.includes('moisturizer') ||
+      lowerTitle.includes('cleanser') || lowerTitle.includes('wash') ||
+      lowerTitle.includes('soap') || lowerTitle.includes('shampoo') ||
+      lowerTitle.includes('conditioner') || lowerTitle.includes('hair') ||
+      lowerTitle.includes('oil') || lowerTitle.includes('gel') ||
+      lowerTitle.includes('spray') || lowerTitle.includes('perfume') ||
+      lowerTitle.includes('deodorant') || lowerTitle.includes('makeup') ||
+      lowerTitle.includes('cosmetic') || lowerTitle.includes('lipstick') ||
+      lowerTitle.includes('nail') || lowerTitle.includes('polish') ||
+      lowerTitle.includes('brush') || lowerTitle.includes('comb') ||
+      lowerTitle.includes('razor') || lowerTitle.includes('trimmer') ||
+      lowerTitle.includes('beauty') || lowerTitle.includes('personal') ||
+      lowerTitle.includes('care') || lowerTitle.includes('hygiene') ||
+      lowerTitle.includes('toothbrush') || lowerTitle.includes('toothpaste') ||
+      lowerTitle.includes('mouthwash') || lowerTitle.includes('floss') ||
+      lowerTitle.includes('bath') || lowerTitle.includes('body') ||
+      lowerTitle.includes('hand') || lowerTitle.includes('foot') ||
+      lowerTitle.includes('massage') || lowerTitle.includes('spa')) {
+    return 'Beauty & Personal Care';
+  }
+  
+  // Sports & Fitness
+  if (lowerTitle.includes('gym') || lowerTitle.includes('fitness') ||
+      lowerTitle.includes('exercise') || lowerTitle.includes('workout') ||
+      lowerTitle.includes('sports') || lowerTitle.includes('athletic') ||
+      lowerTitle.includes('running') || lowerTitle.includes('walking') ||
+      lowerTitle.includes('jogging') || lowerTitle.includes('cycling') ||
+      lowerTitle.includes('swimming') || lowerTitle.includes('yoga') ||
+      lowerTitle.includes('pilates') || lowerTitle.includes('dance') ||
+      lowerTitle.includes('aerobics') || lowerTitle.includes('cardio') ||
+      lowerTitle.includes('strength') || lowerTitle.includes('weight') ||
+      lowerTitle.includes('dumbbell') || lowerTitle.includes('barbell') ||
+      lowerTitle.includes('resistance') || lowerTitle.includes('band') ||
+      lowerTitle.includes('mat') || lowerTitle.includes('ball') ||
+      lowerTitle.includes('racket') || lowerTitle.includes('bat') ||
+      lowerTitle.includes('shoes') || lowerTitle.includes('sneakers') ||
+      lowerTitle.includes('sports shoes') || lowerTitle.includes('football') ||
+      lowerTitle.includes('cricket') || lowerTitle.includes('tennis') ||
+      lowerTitle.includes('badminton') || lowerTitle.includes('basketball') ||
+      lowerTitle.includes('volleyball') || lowerTitle.includes('training') ||
+      lowerTitle.includes('equipment') || lowerTitle.includes('gear') ||
+      lowerTitle.includes('accessories') || lowerTitle.includes('protective') ||
+      lowerTitle.includes('helmet') || lowerTitle.includes('gloves') ||
+      lowerTitle.includes('knee') || lowerTitle.includes('elbow') ||
+      lowerTitle.includes('support') || lowerTitle.includes('brace')) {
+    return 'Sports & Fitness';
+  }
+  
+  // Bags, Wallets and Luggage
+  if (lowerTitle.includes('bag') || lowerTitle.includes('luggage') ||
+      lowerTitle.includes('suitcase') || lowerTitle.includes('trolley') ||
+      lowerTitle.includes('backpack') || lowerTitle.includes('handbag') ||
+      lowerTitle.includes('purse') || lowerTitle.includes('wallet') ||
+      lowerTitle.includes('travel') || lowerTitle.includes('carry') ||
+      lowerTitle.includes('duffel') || lowerTitle.includes('messenger') ||
+      lowerTitle.includes('shoulder') || lowerTitle.includes('crossbody') ||
+      lowerTitle.includes('clutch') || lowerTitle.includes('tote') ||
+      lowerTitle.includes('briefcase') || lowerTitle.includes('laptop bag') ||
+      lowerTitle.includes('gym bag') || lowerTitle.includes('sports bag') ||
+      lowerTitle.includes('school bag') || lowerTitle.includes('office bag') ||
+      lowerTitle.includes('business') || lowerTitle.includes('formal') ||
+      lowerTitle.includes('casual') || lowerTitle.includes('outdoor') ||
+      lowerTitle.includes('hiking') || lowerTitle.includes('camping') ||
+      lowerTitle.includes('wheels') || lowerTitle.includes('spinner') ||
+      lowerTitle.includes('hard case') || lowerTitle.includes('soft case') ||
+      lowerTitle.includes('polypropylene') || lowerTitle.includes('polycarbonate') ||
+      lowerTitle.includes('nylon') || lowerTitle.includes('leather') ||
+      lowerTitle.includes('canvas') || lowerTitle.includes('denim')) {
+    return 'Bags, Wallets and Luggage';
+  }
+  
+  // Shoes & Handbags (separate from clothing)
+  if (lowerTitle.includes('shoes') || lowerTitle.includes('sneakers') ||
+      lowerTitle.includes('sandals') || lowerTitle.includes('flip') ||
+      lowerTitle.includes('flops') || lowerTitle.includes('heels') ||
+      lowerTitle.includes('boots') || lowerTitle.includes('loafers') ||
+      lowerTitle.includes('oxford') || lowerTitle.includes('derby') ||
+      lowerTitle.includes('moccasin') || lowerTitle.includes('slip') ||
+      lowerTitle.includes('on') || lowerTitle.includes('athletic') ||
+      lowerTitle.includes('running') || lowerTitle.includes('walking') ||
+      lowerTitle.includes('casual') || lowerTitle.includes('formal') ||
+      lowerTitle.includes('dress') || lowerTitle.includes('party') ||
+      lowerTitle.includes('wedding') || lowerTitle.includes('office') ||
+      lowerTitle.includes('work') || lowerTitle.includes('school') ||
+      lowerTitle.includes('gym') || lowerTitle.includes('fitness') ||
+      lowerTitle.includes('sports') || lowerTitle.includes('outdoor') ||
+      lowerTitle.includes('hiking') || lowerTitle.includes('climbing') ||
+      lowerTitle.includes('dancing') || lowerTitle.includes('dance') ||
+      lowerTitle.includes('comfort') || lowerTitle.includes('orthopedic') ||
+      lowerTitle.includes('diabetic') || lowerTitle.includes('pregnancy') ||
+      lowerTitle.includes('flat') || lowerTitle.includes('high') ||
+      lowerTitle.includes('low') || lowerTitle.includes('mid') ||
+      lowerTitle.includes('ankle') || lowerTitle.includes('knee') ||
+      lowerTitle.includes('thigh') || lowerTitle.includes('calf') ||
+      lowerTitle.includes('leather') || lowerTitle.includes('canvas') ||
+      lowerTitle.includes('mesh') || lowerTitle.includes('synthetic') ||
+      lowerTitle.includes('rubber') || lowerTitle.includes('foam') ||
+      lowerTitle.includes('cushion') || lowerTitle.includes('sole')) {
+    return 'Shoes & Handbags';
+  }
+  
+  // Grocery & Gourmet Foods
+  if (lowerTitle.includes('food') || lowerTitle.includes('grocery') ||
+      lowerTitle.includes('snack') || lowerTitle.includes('chips') ||
+      lowerTitle.includes('biscuit') || lowerTitle.includes('cookie') ||
+      lowerTitle.includes('cake') || lowerTitle.includes('bread') ||
+      lowerTitle.includes('milk') || lowerTitle.includes('yogurt') ||
+      lowerTitle.includes('cheese') || lowerTitle.includes('butter') ||
+      lowerTitle.includes('oil') || lowerTitle.includes('spice') ||
+      lowerTitle.includes('salt') || lowerTitle.includes('sugar') ||
+      lowerTitle.includes('rice') || lowerTitle.includes('dal') ||
+      lowerTitle.includes('pulse') || lowerTitle.includes('grain') ||
+      lowerTitle.includes('cereal') || lowerTitle.includes('muesli') ||
+      lowerTitle.includes('oats') || lowerTitle.includes('quinoa') ||
+      lowerTitle.includes('lentil') || lowerTitle.includes('bean') ||
+      lowerTitle.includes('nut') || lowerTitle.includes('dry') ||
+      lowerTitle.includes('fruit') || lowerTitle.includes('vegetable') ||
+      lowerTitle.includes('juice') || lowerTitle.includes('drink') ||
+      lowerTitle.includes('beverage') || lowerTitle.includes('tea') ||
+      lowerTitle.includes('coffee') || lowerTitle.includes('chocolate') ||
+      lowerTitle.includes('candy') || lowerTitle.includes('sweet') ||
+      lowerTitle.includes('gourmet') || lowerTitle.includes('organic') ||
+      lowerTitle.includes('natural') || lowerTitle.includes('healthy') ||
+      lowerTitle.includes('diet') || lowerTitle.includes('protein') ||
+      lowerTitle.includes('supplement') || lowerTitle.includes('vitamin')) {
+    return 'Grocery & Gourmet Foods';
+  }
+  
+  // Books
+  if (lowerTitle.includes('book') || lowerTitle.includes('novel') ||
+      lowerTitle.includes('story') || lowerTitle.includes('fiction') ||
+      lowerTitle.includes('non-fiction') || lowerTitle.includes('biography') ||
+      lowerTitle.includes('autobiography') || lowerTitle.includes('memoir') ||
+      lowerTitle.includes('textbook') || lowerTitle.includes('reference') ||
+      lowerTitle.includes('dictionary') || lowerTitle.includes('encyclopedia') ||
+      lowerTitle.includes('magazine') || lowerTitle.includes('journal') ||
+      lowerTitle.includes('comic') || lowerTitle.includes('graphic') ||
+      lowerTitle.includes('children') || lowerTitle.includes('kids') ||
+      lowerTitle.includes('educational') || lowerTitle.includes('learning') ||
+      lowerTitle.includes('study') || lowerTitle.includes('academic') ||
+      lowerTitle.includes('research') || lowerTitle.includes('science') ||
+      lowerTitle.includes('history') || lowerTitle.includes('philosophy') ||
+      lowerTitle.includes('religion') || lowerTitle.includes('spiritual') ||
+      lowerTitle.includes('self-help') || lowerTitle.includes('motivational') ||
+      lowerTitle.includes('business') || lowerTitle.includes('finance') ||
+      lowerTitle.includes('investment') || lowerTitle.includes('economy') ||
+      lowerTitle.includes('politics') || lowerTitle.includes('social') ||
+      lowerTitle.includes('psychology') || lowerTitle.includes('health') ||
+      lowerTitle.includes('fitness') || lowerTitle.includes('cooking') ||
+      lowerTitle.includes('recipe') || lowerTitle.includes('travel') ||
+      lowerTitle.includes('guide') || lowerTitle.includes('manual') ||
+      lowerTitle.includes('instruction') || lowerTitle.includes('tutorial')) {
+    return 'Books';
+  }
+  
+  // Toys & Games
+  if (lowerTitle.includes('toy') || lowerTitle.includes('game') ||
+      lowerTitle.includes('puzzle') || lowerTitle.includes('board') ||
+      lowerTitle.includes('card') || lowerTitle.includes('dice') ||
+      lowerTitle.includes('chess') || lowerTitle.includes('checkers') ||
+      lowerTitle.includes('monopoly') || lowerTitle.includes('scrabble') ||
+      lowerTitle.includes('lego') || lowerTitle.includes('building') ||
+      lowerTitle.includes('blocks') || lowerTitle.includes('construction') ||
+      lowerTitle.includes('doll') || lowerTitle.includes('action') ||
+      lowerTitle.includes('figure') || lowerTitle.includes('stuffed') ||
+      lowerTitle.includes('animal') || lowerTitle.includes('bear') ||
+      lowerTitle.includes('teddy') || lowerTitle.includes('barbie') ||
+      lowerTitle.includes('hot wheels') || lowerTitle.includes('car') ||
+      lowerTitle.includes('truck') || lowerTitle.includes('plane') ||
+      lowerTitle.includes('train') || lowerTitle.includes('robot') ||
+      lowerTitle.includes('remote') || lowerTitle.includes('control') ||
+      lowerTitle.includes('electronic') || lowerTitle.includes('battery') ||
+      lowerTitle.includes('educational') || lowerTitle.includes('learning') ||
+      lowerTitle.includes('kids') || lowerTitle.includes('children') ||
+      lowerTitle.includes('baby') || lowerTitle.includes('infant') ||
+      lowerTitle.includes('toddler') || lowerTitle.includes('preschool') ||
+      lowerTitle.includes('outdoor') || lowerTitle.includes('playground') ||
+      lowerTitle.includes('swing') || lowerTitle.includes('slide') ||
+      lowerTitle.includes('jungle') || lowerTitle.includes('gym') ||
+      lowerTitle.includes('art') || lowerTitle.includes('craft') ||
+      lowerTitle.includes('drawing') || lowerTitle.includes('painting') ||
+      lowerTitle.includes('coloring') || lowerTitle.includes('crayon') ||
+      lowerTitle.includes('marker') || lowerTitle.includes('pencil') ||
+      lowerTitle.includes('paper') || lowerTitle.includes('notebook') ||
+      lowerTitle.includes('sketch') || lowerTitle.includes('canvas')) {
+    return 'Toys & Games';
+  }
+  
+  // Automotive
+  if (lowerTitle.includes('car') || lowerTitle.includes('auto') ||
+      lowerTitle.includes('vehicle') || lowerTitle.includes('motor') ||
+      lowerTitle.includes('engine') || lowerTitle.includes('brake') ||
+      lowerTitle.includes('tire') || lowerTitle.includes('wheel') ||
+      lowerTitle.includes('oil') || lowerTitle.includes('filter') ||
+      lowerTitle.includes('battery') || lowerTitle.includes('spark') ||
+      lowerTitle.includes('plug') || lowerTitle.includes('belt') ||
+      lowerTitle.includes('hose') || lowerTitle.includes('tube') ||
+      lowerTitle.includes('gasket') || lowerTitle.includes('seal') ||
+      lowerTitle.includes('bushing') || lowerTitle.includes('mount') ||
+      lowerTitle.includes('shock') || lowerTitle.includes('absorber') ||
+      lowerTitle.includes('spring') || lowerTitle.includes('strut') ||
+      lowerTitle.includes('suspension') || lowerTitle.includes('steering') ||
+      lowerTitle.includes('transmission') || lowerTitle.includes('clutch') ||
+      lowerTitle.includes('gearbox') || lowerTitle.includes('differential') ||
+      lowerTitle.includes('axle') || lowerTitle.includes('drive') ||
+      lowerTitle.includes('shaft') || lowerTitle.includes('joint') ||
+      lowerTitle.includes('bearing') || lowerTitle.includes('hub') ||
+      lowerTitle.includes('rotor') || lowerTitle.includes('disc') ||
+      lowerTitle.includes('pad') || lowerTitle.includes('caliper') ||
+      lowerTitle.includes('cylinder') || lowerTitle.includes('master') ||
+      lowerTitle.includes('slave') || lowerTitle.includes('clutch') ||
+      lowerTitle.includes('cable') || lowerTitle.includes('wire') ||
+      lowerTitle.includes('harness') || lowerTitle.includes('connector') ||
+      lowerTitle.includes('relay') || lowerTitle.includes('fuse') ||
+      lowerTitle.includes('switch') || lowerTitle.includes('button') ||
+      lowerTitle.includes('knob') || lowerTitle.includes('handle') ||
+      lowerTitle.includes('lever') || lowerTitle.includes('pedal') ||
+      lowerTitle.includes('footrest') || lowerTitle.includes('mat') ||
+      lowerTitle.includes('cover') || lowerTitle.includes('seat') ||
+      lowerTitle.includes('cushion') || lowerTitle.includes('headrest') ||
+      lowerTitle.includes('armrest') || lowerTitle.includes('console') ||
+      lowerTitle.includes('dashboard') || lowerTitle.includes('instrument') ||
+      lowerTitle.includes('cluster') || lowerTitle.includes('gauge') ||
+      lowerTitle.includes('meter') || lowerTitle.includes('display') ||
+      lowerTitle.includes('screen') || lowerTitle.includes('radio') ||
+      lowerTitle.includes('stereo') || lowerTitle.includes('speaker') ||
+      lowerTitle.includes('amplifier') || lowerTitle.includes('subwoofer') ||
+      lowerTitle.includes('tweeter') || lowerTitle.includes('crossover') ||
+      lowerTitle.includes('antenna') || lowerTitle.includes('gps') ||
+      lowerTitle.includes('navigation') || lowerTitle.includes('camera') ||
+      lowerTitle.includes('sensor') || lowerTitle.includes('alarm') ||
+      lowerTitle.includes('security') || lowerTitle.includes('lock') ||
+      lowerTitle.includes('key') || lowerTitle.includes('remote') ||
+      lowerTitle.includes('fob') || lowerTitle.includes('transponder') ||
+      lowerTitle.includes('immobilizer') || lowerTitle.includes('alarm') ||
+      lowerTitle.includes('horn') || lowerTitle.includes('siren') ||
+      lowerTitle.includes('light') || lowerTitle.includes('bulb') ||
+      lowerTitle.includes('led') || lowerTitle.includes('halogen') ||
+      lowerTitle.includes('xenon') || lowerTitle.includes('hid') ||
+      lowerTitle.includes('fog') || lowerTitle.includes('driving') ||
+      lowerTitle.includes('headlight') || lowerTitle.includes('taillight') ||
+      lowerTitle.includes('brake') || lowerTitle.includes('turn') ||
+      lowerTitle.includes('signal') || lowerTitle.includes('hazard') ||
+      lowerTitle.includes('emergency') || lowerTitle.includes('flasher') ||
+      lowerTitle.includes('mirror') || lowerTitle.includes('reflector') ||
+      lowerTitle.includes('bumper') || lowerTitle.includes('guard') ||
+      lowerTitle.includes('spoiler') || lowerTitle.includes('wing') ||
+      lowerTitle.includes('air') || lowerTitle.includes('dam') ||
+      lowerTitle.includes('splitter') || lowerTitle.includes('diffuser') ||
+      lowerTitle.includes('side') || lowerTitle.includes('skirt') ||
+      lowerTitle.includes('panel') || lowerTitle.includes('door') ||
+      lowerTitle.includes('window') || lowerTitle.includes('glass') ||
+      lowerTitle.includes('windshield') || lowerTitle.includes('wiper') ||
+      lowerTitle.includes('blade') || lowerTitle.includes('washer') ||
+      lowerTitle.includes('pump') || lowerTitle.includes('fluid') ||
+      lowerTitle.includes('coolant') || lowerTitle.includes('antifreeze') ||
+      lowerTitle.includes('radiator') || lowerTitle.includes('thermostat') ||
+      lowerTitle.includes('fan') || lowerTitle.includes('clutch') ||
+      lowerTitle.includes('water') || lowerTitle.includes('pump') ||
+      lowerTitle.includes('hose') || lowerTitle.includes('pipe') ||
+      lowerTitle.includes('fitting') || lowerTitle.includes('adapter') ||
+      lowerTitle.includes('coupler') || lowerTitle.includes('union') ||
+      lowerTitle.includes('tee') || lowerTitle.includes('elbow') ||
+      lowerTitle.includes('reducer') || lowerTitle.includes('bush') ||
+      lowerTitle.includes('washer') || lowerTitle.includes('nut') ||
+      lowerTitle.includes('bolt') || lowerTitle.includes('screw') ||
+      lowerTitle.includes('rivet') || lowerTitle.includes('clip') ||
+      lowerTitle.includes('pin') || lowerTitle.includes('ring') ||
+      lowerTitle.includes('snap') || lowerTitle.includes('fastener') ||
+      lowerTitle.includes('bracket') || lowerTitle.includes('mount') ||
+      lowerTitle.includes('bracket') || lowerTitle.includes('holder') ||
+      lowerTitle.includes('support') || lowerTitle.includes('brace') ||
+      lowerTitle.includes('strut') || lowerTitle.includes('tie') ||
+      lowerTitle.includes('rod') || lowerTitle.includes('bar') ||
+      lowerTitle.includes('tube') || lowerTitle.includes('pipe') ||
+      lowerTitle.includes('hollow') || lowerTitle.includes('solid') ||
+      lowerTitle.includes('round') || lowerTitle.includes('square') ||
+      lowerTitle.includes('flat') || lowerTitle.includes('angle') ||
+      lowerTitle.includes('channel') || lowerTitle.includes('beam') ||
+      lowerTitle.includes('plate') || lowerTitle.includes('sheet') ||
+      lowerTitle.includes('strip') || lowerTitle.includes('band') ||
+      lowerTitle.includes('tape') || lowerTitle.includes('film') ||
+      lowerTitle.includes('foil') || lowerTitle.includes('paper') ||
+      lowerTitle.includes('fabric') || lowerTitle.includes('cloth') ||
+      lowerTitle.includes('leather') || lowerTitle.includes('vinyl') ||
+      lowerTitle.includes('rubber') || lowerTitle.includes('plastic') ||
+      lowerTitle.includes('metal') || lowerTitle.includes('steel') ||
+      lowerTitle.includes('aluminum') || lowerTitle.includes('brass') ||
+      lowerTitle.includes('copper') || lowerTitle.includes('bronze') ||
+      lowerTitle.includes('iron') || lowerTitle.includes('cast') ||
+      lowerTitle.includes('forged') || lowerTitle.includes('machined') ||
+      lowerTitle.includes('turned') || lowerTitle.includes('milled') ||
+      lowerTitle.includes('drilled') || lowerTitle.includes('tapped') ||
+      lowerTitle.includes('threaded') || lowerTitle.includes('smooth') ||
+      lowerTitle.includes('rough') || lowerTitle.includes('finished') ||
+      lowerTitle.includes('coated') || lowerTitle.includes('plated') ||
+      lowerTitle.includes('anodized') || lowerTitle.includes('painted') ||
+      lowerTitle.includes('powder') || lowerTitle.includes('galvanized') ||
+      lowerTitle.includes('zinc') || lowerTitle.includes('chrome') ||
+      lowerTitle.includes('nickel') || lowerTitle.includes('silver') ||
+      lowerTitle.includes('gold') || lowerTitle.includes('titanium') ||
+      lowerTitle.includes('tungsten') || lowerTitle.includes('molybdenum') ||
+      lowerTitle.includes('vanadium') || lowerTitle.includes('chromium') ||
+      lowerTitle.includes('manganese') || lowerTitle.includes('silicon') ||
+      lowerTitle.includes('carbon') || lowerTitle.includes('nitrogen') ||
+      lowerTitle.includes('oxygen') || lowerTitle.includes('hydrogen') ||
+      lowerTitle.includes('helium') || lowerTitle.includes('neon') ||
+      lowerTitle.includes('argon') || lowerTitle.includes('krypton') ||
+      lowerTitle.includes('xenon') || lowerTitle.includes('radon') ||
+      lowerTitle.includes('fluorine') || lowerTitle.includes('chlorine') ||
+      lowerTitle.includes('bromine') || lowerTitle.includes('iodine') ||
+      lowerTitle.includes('astatine') || lowerTitle.includes('lithium') ||
+      lowerTitle.includes('sodium') || lowerTitle.includes('potassium') ||
+      lowerTitle.includes('rubidium') || lowerTitle.includes('cesium') ||
+      lowerTitle.includes('francium') || lowerTitle.includes('beryllium') ||
+      lowerTitle.includes('magnesium') || lowerTitle.includes('calcium') ||
+      lowerTitle.includes('strontium') || lowerTitle.includes('barium') ||
+      lowerTitle.includes('radium') || lowerTitle.includes('scandium') ||
+      lowerTitle.includes('yttrium') || lowerTitle.includes('lanthanum') ||
+      lowerTitle.includes('actinium') || lowerTitle.includes('titanium') ||
+      lowerTitle.includes('zirconium') || lowerTitle.includes('hafnium') ||
+      lowerTitle.includes('rutherfordium') || lowerTitle.includes('vanadium') ||
+      lowerTitle.includes('niobium') || lowerTitle.includes('tantalum') ||
+      lowerTitle.includes('dubnium') || lowerTitle.includes('chromium') ||
+      lowerTitle.includes('molybdenum') || lowerTitle.includes('tungsten') ||
+      lowerTitle.includes('seaborgium') || lowerTitle.includes('manganese') ||
+      lowerTitle.includes('technetium') || lowerTitle.includes('rhenium') ||
+      lowerTitle.includes('bohrium') || lowerTitle.includes('iron') ||
+      lowerTitle.includes('ruthenium') || lowerTitle.includes('osmium') ||
+      lowerTitle.includes('hassium') || lowerTitle.includes('cobalt') ||
+      lowerTitle.includes('rhodium') || lowerTitle.includes('iridium') ||
+      lowerTitle.includes('meitnerium') || lowerTitle.includes('nickel') ||
+      lowerTitle.includes('palladium') || lowerTitle.includes('platinum') ||
+      lowerTitle.includes('darmstadtium') || lowerTitle.includes('copper') ||
+      lowerTitle.includes('silver') || lowerTitle.includes('gold') ||
+      lowerTitle.includes('roentgenium') || lowerTitle.includes('zinc') ||
+      lowerTitle.includes('cadmium') || lowerTitle.includes('mercury') ||
+      lowerTitle.includes('copernicium') || lowerTitle.includes('boron') ||
+      lowerTitle.includes('aluminum') || lowerTitle.includes('gallium') ||
+      lowerTitle.includes('indium') || lowerTitle.includes('thallium') ||
+      lowerTitle.includes('nihonium') || lowerTitle.includes('carbon') ||
+      lowerTitle.includes('silicon') || lowerTitle.includes('germanium') ||
+      lowerTitle.includes('tin') || lowerTitle.includes('lead') ||
+      lowerTitle.includes('flerovium') || lowerTitle.includes('nitrogen') ||
+      lowerTitle.includes('phosphorus') || lowerTitle.includes('arsenic') ||
+      lowerTitle.includes('antimony') || lowerTitle.includes('bismuth') ||
+      lowerTitle.includes('moscovium') || lowerTitle.includes('oxygen') ||
+      lowerTitle.includes('sulfur') || lowerTitle.includes('selenium') ||
+      lowerTitle.includes('tellurium') || lowerTitle.includes('polonium') ||
+      lowerTitle.includes('livermorium') || lowerTitle.includes('fluorine') ||
+      lowerTitle.includes('chlorine') || lowerTitle.includes('bromine') ||
+      lowerTitle.includes('iodine') || lowerTitle.includes('astatine') ||
+      lowerTitle.includes('tennessine') || lowerTitle.includes('helium') ||
+      lowerTitle.includes('neon') || lowerTitle.includes('argon') ||
+      lowerTitle.includes('krypton') || lowerTitle.includes('xenon') ||
+      lowerTitle.includes('radon') || lowerTitle.includes('oganesson')) {
+    return 'Automotive';
+  }
+  
+  // Default fallback
+  return 'General';
+};
+
 // Real scraping function
 const scrapeAmazonBestsellers = async (category = 'all') => {
   try {
